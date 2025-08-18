@@ -18,4 +18,13 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/Appearance');
     })->name('appearance');
+
+    // Resource routes for profile data
+    Route::resource('emergency-contacts', App\Http\Controllers\EmergencyContactController::class)->except(['create', 'edit']);
+    Route::resource('job-histories', App\Http\Controllers\JobHistoryController::class)->except(['create', 'edit']);
+    Route::resource('trainings', App\Http\Controllers\TrainingController::class)->except(['create', 'edit']);
+    Route::resource('certifications', App\Http\Controllers\CertificationController::class)->except(['create', 'edit']);
+    Route::resource('performance-reviews', App\Http\Controllers\PerformanceReviewController::class)->except(['create', 'edit']);
+    Route::resource('work-goals', App\Http\Controllers\WorkGoalController::class)->except(['create', 'edit']);
+    Route::resource('career-plans', App\Http\Controllers\CareerPlanController::class)->except(['create', 'edit']);
 });

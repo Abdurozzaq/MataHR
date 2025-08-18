@@ -47,4 +47,33 @@ class User extends Authenticatable //implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    // Relasi profil karyawan
+    public function emergencyContacts() {
+        return $this->hasMany(EmergencyContact::class);
+    }
+    public function jobHistories() {
+        return $this->hasMany(JobHistory::class);
+    }
+    public function trainings() {
+        return $this->hasMany(Training::class);
+    }
+    public function certifications() {
+        return $this->hasMany(Certification::class);
+    }
+    public function performanceReviews() {
+        return $this->hasMany(PerformanceReview::class);
+    }
+    public function workGoals() {
+        return $this->hasMany(WorkGoal::class);
+    }
+    public function careerPlans() {
+        return $this->hasMany(CareerPlan::class);
+    }
+    public function supervisedEmployees() {
+        return $this->hasMany(SupervisorEmployee::class, 'supervisor_id');
+    }
+    public function teamPerformances() {
+        return $this->hasMany(TeamPerformance::class, 'supervisor_id');
+    }
 }

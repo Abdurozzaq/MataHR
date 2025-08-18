@@ -1,4 +1,5 @@
 import '../css/app.css';
+import 'primeicons/primeicons.css';
 import '../css/tailwind.css';
 
 import { createSSRApp, h } from 'vue';

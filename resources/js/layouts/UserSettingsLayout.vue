@@ -60,7 +60,7 @@ const sidebarNavItems = computed(() => [
                 </nav>
             </aside>
 
-            <section class="flex-1 md:max-w-2xl">
+            <section class="flex-1">
                 <slot />
             </section>
         </div>

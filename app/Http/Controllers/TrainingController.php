@@ -1,0 +1,40 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\Training;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class TrainingController extends Controller
+{
+    public function index()
+    {
+        return Training::where('user_id', Auth::id())->get();
+    }
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string',
+            'date' => 'nullable|date',
+            'provider' => 'nullable|string',
+        ]);
+        $data['user_id'] = Auth::id();
+        return Training::create($data);
+    }
+    public function update(Request $request, Training $training)
+    {
+        $this->authorize('update', $training);
+        $data = $request->validate([
+            'title' => 'required|string',
+            'date' => 'nullable|date',
+            'provider' => 'nullable|string',
+        ]);
+        $training->update($data);
+        return $training;
+    }
+    public function destroy(Training $training)
+    {
+        $this->authorize('delete', $training);
+        $training->delete();
+        return response()->noContent();
+    }
+}

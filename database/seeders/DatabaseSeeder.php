@@ -58,6 +58,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LeaveSeeder::class,
+            SupervisorSeeder::class,
+            LeaveApprovalSeeder::class
         ]);
     }
 }

@@ -22,7 +22,20 @@ const user = usePage().props.auth.user;
 const clockedIn = ref(false);
 const clockedOut = ref(false);
 // min_work_duration dalam detik, pastikan backend mengirimkan props ini
-const minWorkDuration = ref(usePage().props.min_work_duration ? Number(usePage().props.min_work_duration) : 0);
+// Pastikan minWorkDuration satuan menit, jika dari backend detik maka konversi ke menit
+let rawMinWorkDuration = usePage().props.min_work_duration ? Number(usePage().props.min_work_duration) : 0;
+// Jika lebih dari 300 dan kelipatan 60, kemungkinan detik, ubah ke menit
+if (rawMinWorkDuration > 300 && rawMinWorkDuration % 60 === 0) {
+  rawMinWorkDuration = rawMinWorkDuration / 60;
+}
+const minWorkDuration = ref(rawMinWorkDuration);
+// Format minWorkDuration (menit) ke jam:menit:detik
+function formatMinWorkDuration() {
+  const totalMinutes = minWorkDuration.value;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+}
 const errorMessage = ref('');
 const workDuration = ref('');
 const successMessage = ref('');
@@ -343,6 +356,7 @@ const handleClockOut = () => {
         <span class="text-base font-semibold text-blue-800 dark:text-blue-200">Waktu Sekarang:</span>
         <span class="text-lg font-bold text-blue-900 dark:text-blue-100">{{ formatDateTime(now) }}</span>
   <span v-if="clockedIn && workDuration" class="text-base font-semibold text-green-700 dark:text-green-300 mt-2">Sudah bekerja hari ini: <span class="font-mono">{{ workDuration }}</span></span>
+  <span v-if="minWorkDuration" class="text-base font-semibold text-yellow-700 dark:text-yellow-300 mt-1">Minimal kerja hari ini (jadwal): <span class="font-mono">{{ formatMinWorkDuration() }}</span></span>
       </div>
         <div class="w-full flex flex-col gap-2">
           <h2 class="text-3xl font-bold mb-1 text-blue-700 dark:text-blue-400">Absensi Kehadiran</h2>

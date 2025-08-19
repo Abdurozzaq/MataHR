@@ -1,5 +1,7 @@
 <script setup>
 import ApplicationLogo from '@/components/ApplicationLogo.vue';
+
+const appName = import.meta.env.VITE_APP_NAME;
 </script>
 
 <template>
@@ -9,7 +11,7 @@ import ApplicationLogo from '@/components/ApplicationLogo.vue';
         variant="link"
         as="InertiaLink"
     >
-        <ApplicationLogo class="block h-8 lg:h-10 w-auto fill-current text-surface-900 dark:text-surface-0" />
-        <span class="font-bold">Laravel + PrimeVue Starter Kit</span>
+        <!-- <ApplicationLogo class="block h-8 lg:h-10 w-auto fill-current text-surface-900 dark:text-surface-0" /> -->
+    <span class="font-bold">{{ appName }}</span>
     </Button>
 </template>

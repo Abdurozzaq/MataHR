@@ -28,6 +28,12 @@ export function useAppLayout() {
             active: currentRoute.value == 'dashboard',
         },
         {
+            label: 'Pengajuan Cuti',
+            lucideIcon: Info,
+            route: route('leave.index'),
+            active: currentRoute.value == 'leave.index',
+        },
+        {
             label: 'Resources',
             lucideIcon: Info,
             items: [

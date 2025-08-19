@@ -55,5 +55,9 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eksekutif',
                 'email' => 'eksekutif@example.com',
             ]);
+
+        $this->call([
+            LeaveSeeder::class,
+        ]);
     }
 }

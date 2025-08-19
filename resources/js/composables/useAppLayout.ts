@@ -28,6 +28,12 @@ export function useAppLayout() {
             active: currentRoute.value == 'dashboard',
         },
         {
+            label: 'Absensi',
+            lucideIcon: Info,
+            route: route('absent'),
+            active: currentRoute.value == 'absent',
+        },
+        {
             label: 'Pengajuan Cuti',
             lucideIcon: FileSearch,
             route: route('leave.index'),

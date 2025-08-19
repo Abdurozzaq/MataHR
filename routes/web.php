@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LocationController;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,6 +19,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/reverse-geocode', [LocationController::class, 'reverseGeocode']);
+
 // Route untuk karyawan request cuti
 Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
 Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
@@ -26,6 +31,13 @@ Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.d
 Route::get('/leave/subordinate', [LeaveController::class, 'subordinate'])->name('leave.subordinate');
 Route::post('/leave/approve/{id}', [LeaveController::class, 'approve'])->name('leave.approve');
 Route::post('/leave/reject/{id}', [LeaveController::class, 'reject'])->name('leave.reject');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/absent', [AttendanceController::class, 'today'])->name('absent');
+    Route::post('/attendances/clock-in', [AttendanceController::class, 'clockIn']);
+    Route::post('/attendances/clock-out', [AttendanceController::class, 'clockOut']);
+});
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

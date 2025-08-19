@@ -56,10 +56,12 @@ class DatabaseSeeder extends Seeder
                 'email' => 'eksekutif@example.com',
             ]);
 
-        $this->call([
-            LeaveSeeder::class,
-            SupervisorSeeder::class,
-            LeaveApprovalSeeder::class
-        ]);
+            $this->call([
+                LeaveSeeder::class,
+                SupervisorSeeder::class,
+                LeaveApprovalSeeder::class,
+                SettingSeeder::class,
+                WorkScheduleSeeder::class,
+            ]);
     }
 }

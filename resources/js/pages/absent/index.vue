@@ -350,7 +350,7 @@ const handleClockOut = () => {
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbs">
-    <Head title="Absensi" />
+    <InertiaHead title="Absensi" />
     <div class="w-full max-w-[100vw] mx-auto rounded-2xl border border-blue-100 dark:border-neutral-700 shadow-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 p-6 md:p-10 flex flex-col gap-8">
       <div class="w-full flex flex-col items-start gap-1 mb-2">
         <span class="text-base font-semibold text-blue-800 dark:text-blue-200">Waktu Sekarang:</span>

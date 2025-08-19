@@ -18,7 +18,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        $user = $request->user()->load([
+        $user = \App\Models\User::with([
             'emergencyContacts',
             'jobHistories',
             'trainings',
@@ -28,11 +28,12 @@ class ProfileController extends Controller
             'careerPlans',
             'supervisedEmployees.employee',
             'teamPerformances',
-        ]);
+        ])->findOrFail($request->user()->id);
         return Inertia::render('settings/Profile', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'user' => $user,
+            'old' => session('_old_input', []),
         ]);
     }
 
@@ -42,10 +43,12 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
+        $data = $request->validated();
 
-        $user?->fill($request->validated());
+        // Fill all fields except id, created_at, updated_at
+        $user?->fill(collect($data)->except(['id', 'created_at', 'updated_at'])->toArray());
 
-        if ($user && $user->isDirty('email')) {
+        if ($user && array_key_exists('email', $data) && $user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 

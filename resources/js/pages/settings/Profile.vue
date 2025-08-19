@@ -128,7 +128,10 @@ const breadcrumbs = [
 
 const deleteUserModalOpen = ref(false);
 
-const user = usePage().props.user ?? usePage().props.auth.user;
+// Ambil user dari response backend (langsung dari tabel users), dan old value dari session jika ada
+const user = usePage().props.user;
+console.log('User data:', user);
+const old = usePage().props.old ?? {};
 const contacts = ref([]);
 const showContactForm = ref(false);
 const editingContact = ref(null);
@@ -154,6 +157,7 @@ onMounted(() => {
     refreshContacts();
 });
 const toast = useToast();
+console.log(user.email)
 const updateProfileForm = useForm({
     name: user.name ?? '',
     email: user.email ?? '',
@@ -214,6 +218,14 @@ const updateProfileInformation = () => {
                         </template>
                         <template #content>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                       <label for="email" class="font-semibold text-gray-700 dark:text-gray-200">Email</label>
+                                       <InputText id="email" v-model="updateProfileForm.email" type="email" fluid />
+                                   </div>
+                                   <div>
+                                       <label for="name" class="font-semibold text-gray-700 dark:text-gray-200">Nama Panggilan</label>
+                                       <InputText id="name" v-model="updateProfileForm.name" fluid />
+                                   </div>
                                 <div>
                                     <label for="full_name" class="font-semibold text-gray-700 dark:text-gray-200">Nama Lengkap</label>
                                     <InputText id="full_name" v-model="updateProfileForm.full_name" fluid />
@@ -237,7 +249,7 @@ const updateProfileInformation = () => {
                                 </div>
                                 <div class="md:col-span-2">
                                     <label for="address" class="font-semibold text-gray-700 dark:text-gray-200">Alamat Lengkap</label>
-                                    <InputText id="address" v-model="updateProfileForm.address" fluid />
+                                        <Textarea id="address" v-model="updateProfileForm.address" autoResize rows="2" class="w-full" />
                                 </div>
                                 <div>
                                     <label for="phone" class="font-semibold text-gray-700 dark:text-gray-200">Nomor Telepon</label>
@@ -249,18 +261,19 @@ const updateProfileInformation = () => {
                                 </div>
                                 <div>
                                     <label for="marital_status" class="font-semibold text-gray-700 dark:text-gray-200">Status Perkawinan</label>
-                                    <select id="marital_status" v-model="updateProfileForm.marital_status" class="p-inputtext w-full">
-                                        <option value="">Pilih</option>
-                                        <option value="single">Belum Menikah</option>
-                                        <option value="married">Menikah</option>
-                                        <option value="divorced">Cerai</option>
-                                        <option value="widowed">Duda/Janda</option>
-                                    </select>
+                                        <select id="marital_status" v-model="updateProfileForm.marital_status" class="p-inputtext w-full">
+                                            <option value="">Pilih</option>
+                                            <option value="single">Belum Menikah</option>
+                                            <option value="married">Menikah</option>
+                                            <option value="divorced">Cerai</option>
+                                            <option value="widowed">Duda/Janda</option>
+                                        </select>
                                 </div>
                                 <div>
                                     <label for="nik" class="font-semibold text-gray-700 dark:text-gray-200">Nomor KTP/NIK</label>
                                     <InputText id="nik" v-model="updateProfileForm.nik" fluid />
                                 </div>
+                                   
                             </div>
                         </template>
                     </Card>
@@ -272,23 +285,23 @@ const updateProfileInformation = () => {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="employee_id" class="font-semibold text-gray-700 dark:text-gray-200">Nomor ID Karyawan</label>
-                                    <InputText id="employee_id" v-model="updateProfileForm.employee_id" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="employee_id" v-model="updateProfileForm.employee_id" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
                                 <div>
                                     <label for="position" class="font-semibold text-gray-700 dark:text-gray-200">Jabatan</label>
-                                    <InputText id="position" v-model="updateProfileForm.position" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="position" v-model="updateProfileForm.position" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
                                 <div>
                                     <label for="department" class="font-semibold text-gray-700 dark:text-gray-200">Departemen/Divisi</label>
-                                    <InputText id="department" v-model="updateProfileForm.department" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="department" v-model="updateProfileForm.department" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
                                 <div>
                                     <label for="start_date" class="font-semibold text-gray-700 dark:text-gray-200">Tanggal Mulai Bekerja</label>
-                                    <InputText id="start_date" v-model="updateProfileForm.start_date" type="date" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="start_date" v-model="updateProfileForm.start_date" type="date" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
                                 <div>
                                     <label for="employment_status" class="font-semibold text-gray-700 dark:text-gray-200">Status Karyawan</label>
-                                    <select id="employment_status" v-model="updateProfileForm.employment_status" class="p-inputtext w-full" :disabled="user.role === 'karyawan'">
+                                    <select disabled id="employment_status" v-model="updateProfileForm.employment_status" class="p-inputtext w-full" :disabled="user.role === 'karyawan'">
                                         <option value="">Pilih</option>
                                         <option value="permanent">Tetap</option>
                                         <option value="contract">Kontrak</option>
@@ -297,23 +310,19 @@ const updateProfileInformation = () => {
                                 </div>
                                 <div>
                                     <label for="office_location" class="font-semibold text-gray-700 dark:text-gray-200">Lokasi Kantor</label>
-                                    <InputText id="office_location" v-model="updateProfileForm.office_location" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="office_location" v-model="updateProfileForm.office_location" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
+                                <div>
+                                       <label for="supervisor_id" class="font-semibold text-gray-700 dark:text-gray-200">Supervisor ID</label>
+                                       <InputText disabled id="supervisor_id" v-model="updateProfileForm.supervisor_id" type="number" fluid />
+                                   </div>
                                 <div>
                                     <label for="supervisor" class="font-semibold text-gray-700 dark:text-gray-200">Atasan Langsung</label>
-                                    <InputText id="supervisor" v-model="updateProfileForm.supervisor" fluid :disabled="user.role === 'karyawan'" />
-                                </div>
-                                <div>
-                                    <label for="salary" class="font-semibold text-gray-700 dark:text-gray-200">Informasi Gaji</label>
-                                    <InputText id="salary" v-model="updateProfileForm.salary" type="number" fluid :disabled="user.role === 'karyawan'" />
-                                </div>
-                                <div>
-                                    <label for="benefits" class="font-semibold text-gray-700 dark:text-gray-200">Tunjangan</label>
-                                    <InputText id="benefits" v-model="updateProfileForm.benefits" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="supervisor" v-model="updateProfileForm.supervisor" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
                                 <div>
                                     <label for="bank_account" class="font-semibold text-gray-700 dark:text-gray-200">Nomor Rekening Bank</label>
-                                    <InputText id="bank_account" v-model="updateProfileForm.bank_account" fluid :disabled="user.role === 'karyawan'" />
+                                    <InputText disabled id="bank_account" v-model="updateProfileForm.bank_account" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
                             </div>
                         </template>

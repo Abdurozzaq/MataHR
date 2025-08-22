@@ -13,45 +13,61 @@ export function useAppLayout() {
         return route().current();
     });
 
+    // Ambil role user dari session
+    const userRole = computed(() => page.props.auth?.user?.role);
+
     // Menu items
-    const menuItems = computed<MenuItem[]>(() => [
-        {
-            label: 'Home',
-            lucideIcon: House,
-            route: route('welcome'),
-            active: currentRoute.value == 'welcome',
-        },
-        {
-            label: 'Dashboard',
-            lucideIcon: LayoutGrid,
-            route: route('dashboard'),
-            active: currentRoute.value == 'dashboard',
-        },
-        {
-            label: 'Absensi',
-            lucideIcon: Info,
-            route: route('absent'),
-            active: currentRoute.value == 'absent',
-        },
-        {
-            label: 'Pengajuan Cuti',
-            lucideIcon: FileSearch,
-            route: route('leave.index'),
-            active: currentRoute.value == 'leave.index',
-        },
-        {
-            label: 'Supervisor',
-            lucideIcon: FolderGit2,
-            items: [
-                {
-                    label: 'Approval Cuti Bawahan',
-                    route: route('leave.subordinate'),
-                    lucideIcon: ExternalLink,
-                    active: currentRoute.value == 'leave.subordinate',
-                },
-            ],
-        },
-    ]);
+    const menuItems = computed<MenuItem[]>(() => {
+        const items: MenuItem[] = [
+            {
+                label: 'Home',
+                lucideIcon: House,
+                route: route('welcome'),
+                active: currentRoute.value == 'welcome',
+            },
+            {
+                label: 'Dashboard',
+                lucideIcon: LayoutGrid,
+                route: route('dashboard'),
+                active: currentRoute.value == 'dashboard',
+            },
+            {
+                label: 'Absensi',
+                lucideIcon: Info,
+                route: route('absent'),
+                active: currentRoute.value == 'absent',
+            },
+            {
+                label: 'Pengajuan Cuti',
+                lucideIcon: FileSearch,
+                route: route('leave.index'),
+                active: currentRoute.value == 'leave.index',
+            },
+        ];
+
+        // Tampilkan menu supervisor hanya jika user supervisor
+        if (userRole.value === 'supervisor') {
+            items.push({
+                label: 'Supervisor',
+                lucideIcon: FolderGit2,
+                items: [
+                    {
+                        label: 'Approval Cuti Bawahan',
+                        route: route('leave.subordinate'),
+                        lucideIcon: ExternalLink,
+                        active: currentRoute.value == 'leave.subordinate',
+                    },
+                    {
+                        label: 'Dashboard Absensi Bawahan',
+                        route: route('supervisor.attendance.dashboard'),
+                        lucideIcon: LayoutGrid,
+                        active: currentRoute.value == 'supervisor.attendance.dashboard',
+                    },
+                ],
+            });
+        }
+        return items;
+    });
 
     // User menu and logout functionality.
     const logoutForm = useForm({});

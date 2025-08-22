@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SupervisorDashboardController;
 
 
 Route::get('/', function () {
@@ -37,6 +38,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/absent', [AttendanceController::class, 'today'])->name('absent');
     Route::post('/attendances/clock-in', [AttendanceController::class, 'clockIn']);
     Route::post('/attendances/clock-out', [AttendanceController::class, 'clockOut']);
+});
+
+Route::middleware(['auth'])->group(function () {
+    // ...existing code...
+    Route::get('/absent', [AttendanceController::class, 'today'])->name('absent');
+    Route::post('/attendances/clock-in', [AttendanceController::class, 'clockIn']);
+    Route::post('/attendances/clock-out', [AttendanceController::class, 'clockOut']);
+
+    // Route dashboard absensi supervisor
+    Route::get('/supervisor/dashboard', [SupervisorDashboardController::class, 'index'])
+        ->name('supervisor.attendance.dashboard');
 });
 
 require __DIR__ . '/settings.php';

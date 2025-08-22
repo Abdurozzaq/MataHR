@@ -185,21 +185,21 @@ const cancelLeave = () => {
 <template>
   <AppLayout :breadcrumbs="breadcrumbs">
     <Head title="Pengajuan Cuti" />
-    <div :class="['p-6 rounded-xl shadow', isDark ? 'bg-gradient-to-br from-neutral-900 via-slate-800 to-neutral-800 text-neutral-100' : 'bg-gradient-to-br from-blue-50 via-sky-100 to-blue-200 text-neutral-900']">
+  <div class="p-6 rounded-xl shadow">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div class="flex flex-wrap gap-3 items-center">
-          <InputText v-model="searchValue" placeholder="Cari..." :class="[isDark ? 'min-w-[180px] h-10 border-slate-700 bg-neutral-900 text-neutral-100 focus:border-blue-500' : 'min-w-[180px] h-10 border-blue-300 focus:border-blue-500']" @input="page.value = 1" />
+          <InputText v-model="searchValue" placeholder="Cari..." class="min-w-[180px] h-10" @input="page.value = 1" />
           <Dropdown v-model="searchField" :options="[
             { label: 'Nama', value: 'employee_name' },
             { label: 'Jenis Cuti', value: 'leave_type' },
-          ]" optionLabel="label" optionValue="value" :class="[isDark ? 'min-w-[120px] h-10 border-slate-700 bg-neutral-900 text-neutral-100 focus:border-blue-500' : 'min-w-[120px] h-10 border-blue-300 focus:border-blue-500']" />
-          <Dropdown v-model="statusFilter" :options="statusOptions" optionLabel="label" optionValue="value" placeholder="Status" :class="[isDark ? 'min-w-[120px] h-10 border-slate-700 bg-neutral-900 text-neutral-100 focus:border-blue-500' : 'min-w-[120px] h-10 border-blue-300 focus:border-blue-500']" />
-          <Dropdown v-model="rows" :options="pageSizeOptions" optionLabel="label" optionValue="value" placeholder="Baris per halaman" :class="[isDark ? 'min-w-[120px] h-10 border-slate-700 bg-neutral-900 text-neutral-100 focus:border-blue-500' : 'min-w-[120px] h-10 border-blue-300 focus:border-blue-500']" @change="page.value = 1" />
-          <Button label="Cari" icon="pi pi-search" @click="fetchLeaves" :class="[isDark ? 'bg-blue-700 border-blue-700 text-white hover:bg-blue-800 hover:border-blue-800 h-10 px-4 rounded-lg' : 'bg-blue-500 border-blue-500 text-white hover:bg-blue-600 hover:border-blue-600 h-10 px-4 rounded-lg']" />
+          ]" optionLabel="label" optionValue="value" class="min-w-[120px] h-10" />
+          <Dropdown v-model="statusFilter" :options="statusOptions" optionLabel="label" optionValue="value" placeholder="Status" class="min-w-[120px] h-10" />
+          <Dropdown v-model="rows" :options="pageSizeOptions" optionLabel="label" optionValue="value" placeholder="Baris per halaman" class="min-w-[120px] h-10" @change="page.value = 1" />
+          <Button label="Cari" icon="pi pi-search" @click="fetchLeaves" />
         </div>
-        <Button label="Tambah Pengajuan" icon="pi pi-plus" @click="openDialog('create')" :class="[isDark ? 'bg-green-700 border-green-700 text-white hover:bg-green-800 hover:border-green-800 h-10 px-4 rounded-lg' : 'bg-green-500 border-green-500 text-white hover:bg-green-600 hover:border-green-600 h-10 px-4 rounded-lg']" />
+  <Button label="Tambah Pengajuan" icon="pi pi-plus" @click="openDialog('create')" />
       </div>
-      <div :class="[isDark ? 'overflow-x-auto rounded-xl shadow border border-slate-700 bg-neutral-900' : 'overflow-x-auto rounded-xl shadow border border-blue-100 bg-white']">
+  <div class="overflow-x-auto">
         <DataTable
           :value="leaveData"
           :loading="loading"
@@ -209,39 +209,35 @@ const cancelLeave = () => {
           :sortField="sortField"
           :sortOrder="sortOrder"
           dataKey="id"
-          class="shadow-none rounded-xl border-0"
-          style="border: none;"
           @sort="e => { sortField.value = e.sortField; sortOrder.value = e.sortOrder }"
         >
-          <Column field="employee_name" header="Nama" sortable :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'" :bodyStyle="isDark ? 'font-weight: 500; color: #f3f4f6;' : 'font-weight: 500;'" />
-          <Column field="leave_type" header="Jenis Cuti" sortable :body="leaveTypeLabel" :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'" :bodyStyle="isDark ? 'font-weight: 500; color: #f3f4f6;' : 'font-weight: 500;'" />
-          <Column field="start_date" header="Mulai" sortable :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'" :bodyStyle="isDark ? 'font-weight: 500; color: #f3f4f6;' : 'font-weight: 500;'" />
-          <Column field="end_date" header="Selesai" sortable :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'" :bodyStyle="isDark ? 'font-weight: 500; color: #f3f4f6;' : 'font-weight: 500;'" />
-          <Column field="reason" header="Alasan" :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'" :bodyStyle="isDark ? 'font-weight: 500; color: #f3f4f6;' : 'font-weight: 500;'" />
-          <Column header="Status" :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'">
+          <Column field="employee_name" header="Nama" sortable />
+          <Column field="leave_type" header="Jenis Cuti" sortable :body="leaveTypeLabel" />
+          <Column field="start_date" header="Mulai" sortable />
+          <Column field="end_date" header="Selesai" sortable />
+          <Column field="reason" header="Alasan" />
+          <Column header="Status">
             <template #body="{ data }">
               <span>
                   <template v-if="data.approved_at">
-                    <span :style="isDark ? 'color: #22c55e; font-weight: bold; background: #14532d; padding: 2px 10px; border-radius: 8px;' : 'color: #22c55e; font-weight: bold; background: #dcfce7; padding: 2px 10px; border-radius: 8px;'">Disetujui</span>
+                    <span>Disetujui</span>
                   </template>
                   <template v-else-if="data.rejected_at">
-                    <span :style="isDark ? 'color: #ef4444; font-weight: bold; background: #7f1d1d; padding: 2px 10px; border-radius: 8px;' : 'color: #ef4444; font-weight: bold; background: #fee2e2; padding: 2px 10px; border-radius: 8px;'">Ditolak</span>
+                    <span>Ditolak</span>
                   </template>
                   <template v-else>
-                    <span :style="isDark ? 'color: #eab308; font-weight: bold; background: #78350f; padding: 2px 10px; border-radius: 8px;' : 'color: #eab308; font-weight: bold; background: #fef9c3; padding: 2px 10px; border-radius: 8px;'">Pending</span>
+                    <span>Pending</span>
                   </template>
               </span>
             </template>
           </Column>
-          <Column header="Aksi" :headerStyle="isDark ? 'background: #1e293b; color: #38bdf8; font-weight: 600;' : 'background: #e0f2fe; color: #2563eb; font-weight: 600;'">
+          <Column header="Aksi">
             <template #body="{ data }">
               <div class="flex gap-2 justify-center">
                 <Button 
                   label="Edit" 
                   icon="pi pi-pencil" 
-                  size="small" 
-                  outlined 
-                  :class="isDark ? 'border-blue-400 text-blue-300 hover:bg-slate-800 hover:border-blue-500' : 'border-blue-400 text-blue-700 hover:bg-blue-50 hover:border-blue-500'" 
+                  size="small"  
                   @click="openDialog('edit', data)" 
                   :disabled="data.approved_at || data.rejected_at"
                 />
@@ -249,8 +245,6 @@ const cancelLeave = () => {
                   label="Hapus" 
                   icon="pi pi-trash" 
                   size="small" 
-                  outlined 
-                  :class="isDark ? 'border-red-400 text-red-300 hover:bg-slate-800 hover:border-red-500' : 'border-red-400 text-red-700 hover:bg-red-50 hover:border-red-500'" 
                   @click="deleteLeave(data.id)" 
                   :disabled="data.approved_at || data.rejected_at"
                 />
@@ -259,54 +253,54 @@ const cancelLeave = () => {
           </Column>
         </DataTable>
       </div>
-      <Paginator
-        :rows="rows"
-        :totalRecords="totalRecords"
-        :first="(page - 1) * rows"
-        @page="e => { page.value = e.page + 1; rows.value = e.rows }"
-        :class="isDark ? 'mt-6 text-neutral-100' : 'mt-6'"
+  <Paginator
+    :rows="rows"
+    :totalRecords="totalRecords"
+    :first="(page - 1) * rows"
+    @page="e => { page.value = e.page + 1; rows.value = e.rows }"
+    class="mt-6"
       />
     </div>
 
     <Dialog v-model:visible="showDialog" :header="dialogMode === 'create' ? 'Tambah Pengajuan' : 'Edit Pengajuan'" modal class="min-w-[350px]">
       <form @submit.prevent="saveLeave" class="flex flex-col gap-4 p-2">
-        <div v-if="errorMessage" :class="isDark ? 'bg-red-900 text-red-300 px-3 py-2 rounded mb-2 text-sm' : 'bg-red-100 text-red-700 px-3 py-2 rounded mb-2 text-sm'">
+  <div v-if="errorMessage" class="bg-red-100 text-red-700 px-3 py-2 rounded mb-2 text-sm border border-red-300">
           {{ errorMessage }}
         </div>
         <div class="flex flex-col gap-2">
-          <label :class="isDark ? 'text-sm font-medium text-blue-300' : 'text-sm font-medium text-blue-700'">Nama Karyawan</label>
-          <InputText :value="form.employee_name" placeholder="Nama Karyawan" disabled :class="isDark ? 'h-10 border-slate-700 bg-neutral-900 text-neutral-100' : 'h-10 border-blue-300 bg-blue-50'" />
+          <label class="text-sm font-medium">Nama Karyawan</label>
+          <InputText :value="form.employee_name" placeholder="Nama Karyawan" disabled class="h-10" />
         </div>
         <div class="flex flex-col gap-2">
-          <label :class="isDark ? 'text-sm font-medium text-blue-300' : 'text-sm font-medium text-blue-700'">Jenis Cuti</label>
-          <Dropdown v-model="form.leave_type" :options="leaveTypes" optionLabel="label" optionValue="value" placeholder="Jenis Cuti" required :class="isDark ? 'h-10 border-slate-700 bg-neutral-900 text-neutral-100' : 'h-10 border-blue-300'" />
+          <label class="text-sm font-medium">Jenis Cuti</label>
+          <Dropdown v-model="form.leave_type" :options="leaveTypes" optionLabel="label" optionValue="value" placeholder="Jenis Cuti" required class="h-10" />
         </div>
         <div class="flex gap-2">
           <div class="flex flex-col gap-2 w-1/2">
-            <label :class="isDark ? 'text-sm font-medium text-blue-300' : 'text-sm font-medium text-blue-700'">Mulai</label>
-            <InputText v-model="form.start_date" type="date" placeholder="Mulai" required :class="isDark ? 'h-10 border-slate-700 bg-neutral-900 text-neutral-100' : 'h-10 border-blue-300'" />
+            <label class="text-sm font-medium">Mulai</label>
+            <InputText v-model="form.start_date" type="date" placeholder="Mulai" required class="h-10" />
           </div>
           <div class="flex flex-col gap-2 w-1/2">
-            <label :class="isDark ? 'text-sm font-medium text-blue-300' : 'text-sm font-medium text-blue-700'">Selesai</label>
-            <InputText v-model="form.end_date" type="date" placeholder="Selesai" required :class="isDark ? 'h-10 border-slate-700 bg-neutral-900 text-neutral-100' : 'h-10 border-blue-300'" />
+            <label class="text-sm font-medium">Selesai</label>
+            <InputText v-model="form.end_date" type="date" placeholder="Selesai" required class="h-10" />
           </div>
         </div>
         <div class="flex flex-col gap-2">
-          <label :class="isDark ? 'text-sm font-medium text-blue-300' : 'text-sm font-medium text-blue-700'">Alasan</label>
-          <InputText v-model="form.reason" placeholder="Alasan" required :class="isDark ? 'h-10 border-slate-700 bg-neutral-900 text-neutral-100' : 'h-10 border-blue-300'" />
+          <label class="text-sm font-medium">Alasan</label>
+          <InputText v-model="form.reason" placeholder="Alasan" required class="h-10" />
         </div>
         <!-- Status otomatis, tidak bisa dipilih manual -->
         <div class="flex gap-2 justify-end mt-2">
-          <Button label="Batal" @click="showDialog = false" :class="isDark ? 'bg-slate-700 text-neutral-100 hover:bg-slate-800' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'" />
-          <Button label="Simpan" type="submit" :loading="loading" :class="isDark ? 'bg-blue-700 border-blue-700 text-white hover:bg-blue-800 hover:border-blue-800' : 'bg-blue-500 border-blue-500 text-white hover:bg-blue-600 hover:border-blue-600'" />
+          <Button label="Batal" @click="showDialog = false" />
+          <Button label="Simpan" type="submit" :loading="loading" />
         </div>
       </form>
     </Dialog>
     <Dialog v-model:visible="showCancelDialog" header="Konfirmasi Cancel Cuti" modal class="min-w-[350px]">
-      <div :class="isDark ? 'mb-4 text-blue-300' : 'mb-4 text-blue-700'">Apakah Anda yakin ingin membatalkan cuti ini? Data cuti tidak akan dihapus, hanya statusnya menjadi batal.</div>
+  <div class="mb-4">Apakah Anda yakin ingin membatalkan cuti ini? Data cuti tidak akan dihapus, hanya statusnya menjadi batal.</div>
       <div class="flex gap-2 justify-end">
-        <Button label="Batal" @click="showCancelDialog = false" :class="isDark ? 'bg-slate-700 text-neutral-100 hover:bg-slate-800' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'" />
-        <Button label="Ya, Cancel" severity="warning" :loading="loading" @click="cancelLeave" :class="isDark ? 'bg-yellow-700 border-yellow-700 text-white hover:bg-yellow-800 hover:border-yellow-800' : 'bg-yellow-400 border-yellow-400 text-white hover:bg-yellow-500 hover:border-yellow-500'" />
+  <Button label="Batal" @click="showCancelDialog = false" />
+  <Button label="Ya, Cancel" severity="warning" :loading="loading" @click="cancelLeave" />
       </div>
     </Dialog>
   </AppLayout>

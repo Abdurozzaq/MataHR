@@ -48,6 +48,7 @@ class ProfileUpdateRequest extends FormRequest
                 'salary' => ['nullable', 'numeric'],
                 'benefits' => ['nullable', 'string'],
                 'bank_account' => ['nullable', 'string', 'max:50'],
+                'bank_name' => ['nullable', 'string', 'max:100'],
             ]);
         }
         return $rules;
@@ -57,7 +58,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         $data = parent::validated($key, $default);
         if ($this->user() && $this->user()->role === 'karyawan') {
-            unset($data['employee_id'], $data['position_id'], $data['department_id'], $data['start_date'], $data['employment_status'], $data['office_location'], $data['supervisor'], $data['salary'], $data['benefits'], $data['bank_account']);
+            unset($data['employee_id'], $data['position_id'], $data['department_id'], $data['start_date'], $data['employment_status'], $data['office_location'], $data['supervisor'], $data['salary'], $data['benefits'], $data['bank_account'], $data['bank_name']);
         }
         return $data;
     }

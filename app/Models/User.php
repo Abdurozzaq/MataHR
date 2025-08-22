@@ -45,7 +45,8 @@ class User extends Authenticatable //implements MustVerifyEmail
         'supervisor',
         'salary',
         'benefits',
-        'bank_account',
+    'bank_account',
+    'bank_name',
     ];
     public function position() {
         return $this->belongsTo(Position::class);

@@ -95,7 +95,7 @@ const filteredSubordinates = computed(() => {
               />
               <div>
                 <div class="font-semibold">{{ data.name }}</div>
-                <div class="text-xs text-gray-500">{{ data.department || '-' }}</div>
+                <div class="text-xs text-gray-500">{{ data.department.name || '-' }}</div>
                 <div class="text-xs text-gray-400">ID: {{ data.employee_id || '-' }}</div>
               </div>
             </div>

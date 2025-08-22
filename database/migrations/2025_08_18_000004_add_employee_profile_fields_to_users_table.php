@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->decimal('salary', 15, 2)->nullable();
             $table->text('benefits')->nullable();
             $table->string('bank_account')->nullable();
+            $table->string('bank_name')->nullable();
         });
     }
 
@@ -35,7 +36,7 @@ return new class extends Migration {
             $table->dropColumn([
                 'full_name', 'birth_date', 'birth_place', 'gender', 'address', 'phone', 'personal_email', 'marital_status', 'nik',
                 'employee_id', 'position_id', 'department_id', 'start_date', 'employment_status', 'office_location', 'supervisor',
-                'salary', 'benefits', 'bank_account'
+                'salary', 'benefits', 'bank_account', 'bank_name'
             ]);
         });
     }

@@ -44,6 +44,7 @@ class UserSeeder extends Seeder
             'salary' => 10000000.00,
             'benefits' => 'Health, Transport',
             'bank_account' => '1234567890',
+            'bank_name' => 'Bank BCA',
             'email_verified_at' => now(),
             'remember_token' => null,
         ]);
@@ -72,6 +73,7 @@ class UserSeeder extends Seeder
             'salary' => 8000000.00,
             'benefits' => 'Health, Transport',
             'bank_account' => '2234567890',
+            'bank_name' => 'Bank BCA',
             'email_verified_at' => now(),
             'remember_token' => null,
         ]);
@@ -100,6 +102,7 @@ class UserSeeder extends Seeder
             'salary' => 7000000.00,
             'benefits' => 'Health, Transport',
             'bank_account' => '3234567890',
+            'bank_name' => 'Bank BCA',
             'email_verified_at' => now(),
             'remember_token' => null,
         ]);
@@ -128,6 +131,7 @@ class UserSeeder extends Seeder
             'salary' => 6000000.00,
             'benefits' => 'Health, Transport',
             'bank_account' => '4234567890',
+            'bank_name' => 'Bank BCA',
             'email_verified_at' => now(),
             'remember_token' => null,
         ]);
@@ -156,6 +160,7 @@ class UserSeeder extends Seeder
             'salary' => 5000000.00,
             'benefits' => 'Health, Transport',
             'bank_account' => '5234567890',
+            'bank_name' => 'Bank BCA',
             'email_verified_at' => now(),
             'remember_token' => null,
             'supervisor_id' => $supervisor->id,

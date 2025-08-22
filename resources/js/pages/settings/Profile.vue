@@ -164,6 +164,7 @@ const updateProfileForm = useForm({
     salary: user.salary ?? '',
     benefits: user.benefits ?? '',
     bank_account: user.bank_account ?? '',
+    bank_name: user.bank_name ?? '',
 });
 
 const departments = ref(usePage().props.departments ?? []);
@@ -343,6 +344,10 @@ const updateProfileInformation = () => {
                                     <label for="bank_account" class="font-semibold text-gray-700 dark:text-gray-200">Nomor Rekening Bank</label>
                                     <InputText disabled id="bank_account" v-model="updateProfileForm.bank_account" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
+                                   <div>
+                                       <label for="bank_name" class="font-semibold text-gray-700 dark:text-gray-200">Nama Bank</label>
+                                       <InputText disabled id="bank_name" v-model="updateProfileForm.bank_name" fluid :disabled="user.role === 'karyawan'" />
+                                   </div>
                             </div>
                         </template>
                     </Card>

@@ -28,7 +28,6 @@ class ProfileController extends Controller
             'workGoals',
             'careerPlans',
             'supervisedEmployees.employee',
-            'teamPerformances',
         ])->findOrFail($request->user()->id);
         return Inertia::render('settings/Profile', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
@@ -49,7 +48,7 @@ class ProfileController extends Controller
         $data = $request->validated();
 
         // Fill all fields except id, created_at, updated_at
-        $user?->fill(collect($data)->except(['id', 'created_at', 'updated_at'])->toArray());
+    $user?->fill(collect($data)->except(['id', 'created_at', 'updated_at'])->toArray());
 
         if ($user && array_key_exists('email', $data) && $user->isDirty('email')) {
             $user->email_verified_at = null;

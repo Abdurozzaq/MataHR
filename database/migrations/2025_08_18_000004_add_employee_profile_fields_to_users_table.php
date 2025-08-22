@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
             $table->string('nik')->nullable();
             $table->string('employee_id')->nullable();
-            $table->string('position')->nullable();
-            $table->string('department')->nullable();
+            $table->unsignedBigInteger('position_id')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
             $table->date('start_date')->nullable();
             $table->enum('employment_status', ['permanent', 'contract', 'intern'])->nullable();
             $table->string('office_location')->nullable();
@@ -34,7 +34,7 @@ return new class extends Migration {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'full_name', 'birth_date', 'birth_place', 'gender', 'address', 'phone', 'personal_email', 'marital_status', 'nik',
-                'employee_id', 'position', 'department', 'start_date', 'employment_status', 'office_location', 'supervisor',
+                'employee_id', 'position_id', 'department_id', 'start_date', 'employment_status', 'office_location', 'supervisor',
                 'salary', 'benefits', 'bank_account'
             ]);
         });

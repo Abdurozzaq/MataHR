@@ -37,8 +37,8 @@ class User extends Authenticatable //implements MustVerifyEmail
         'marital_status',
         'nik',
         'employee_id',
-        'position',
-        'department',
+        'position_id',
+        'department_id',
         'start_date',
         'employment_status',
         'office_location',
@@ -47,6 +47,12 @@ class User extends Authenticatable //implements MustVerifyEmail
         'benefits',
         'bank_account',
     ];
+    public function position() {
+        return $this->belongsTo(Position::class);
+    }
+    public function department() {
+        return $this->belongsTo(Department::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -83,9 +89,6 @@ class User extends Authenticatable //implements MustVerifyEmail
     }
     public function certifications() {
         return $this->hasMany(Certification::class);
-    }
-    public function performanceReviews() {
-        return $this->hasMany(PerformanceReview::class);
     }
     public function workGoals() {
         return $this->hasMany(WorkGoal::class);

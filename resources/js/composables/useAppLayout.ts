@@ -20,12 +20,6 @@ export function useAppLayout() {
     const menuItems = computed<MenuItem[]>(() => {
         const items: MenuItem[] = [
             {
-                label: 'Home',
-                lucideIcon: House,
-                route: route('welcome'),
-                active: currentRoute.value == 'welcome',
-            },
-            {
                 label: 'Dashboard',
                 lucideIcon: LayoutGrid,
                 route: route('dashboard'),
@@ -46,7 +40,7 @@ export function useAppLayout() {
         ];
 
         // Tampilkan menu supervisor hanya jika user supervisor
-        if (userRole.value === 'supervisor') {
+        if (userRole.value === 'supervisor' || userRole.value === 'manajer') {
             items.push({
                 label: 'Supervisor',
                 lucideIcon: FolderGit2,
@@ -62,6 +56,33 @@ export function useAppLayout() {
                         route: route('supervisor.attendance.dashboard'),
                         lucideIcon: LayoutGrid,
                         active: currentRoute.value == 'supervisor.attendance.dashboard',
+                    },
+                ],
+            });
+        }
+
+        if (userRole.value === 'superadmin' || userRole.value === 'manajer' || userRole.value === 'hr_generalist') {
+            items.push({
+                label: 'Master Data',
+                lucideIcon: FolderGit2,
+                items: [
+                    {
+                        label: 'Department',
+                        route: route('department.index'),
+                        lucideIcon: FolderGit2,
+                        active: currentRoute.value == 'department.index',
+                    },
+                    {
+                        label: 'Job Position',
+                        route: route('position.index'),
+                        lucideIcon: FolderGit2,
+                        active: currentRoute.value == 'position.index',
+                    },
+                    {
+                        label: 'Work Schedule',
+                        route: route('work-schedule.index'),
+                        lucideIcon: FolderGit2,
+                        active: currentRoute.value == 'work-schedule.index',
                     },
                 ],
             });

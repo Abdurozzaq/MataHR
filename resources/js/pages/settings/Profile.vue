@@ -1,17 +1,16 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import Dropdown from 'primevue/dropdown';
 import axios from 'axios';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { useToast } from 'primevue/usetoast';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/UserSettingsLayout.vue';
-import DeleteUserModal from '@/components/DeleteUserModal.vue';
 import {
     EmergencyContactTable,
     JobHistoryTable,
     TrainingTable,
     CertificationTable,
-    PerformanceReviewTable,
     WorkGoalTable,
     CareerPlanTable
 } from '@/components/profile';
@@ -70,20 +69,6 @@ function addCertification() { editingCertification.value = null; showCertificati
 function editCertification(certification) { editingCertification.value = { ...certification }; showCertificationForm.value = true; }
 function deleteCertification(id) { axios.delete(`/certifications/${id}`).then(() => refreshCertifications()); }
 
-const reviews = ref([]);
-const showReviewForm = ref(false);
-const editingReview = ref(null);
-function refreshReviews() {
-    axios.get('/performance-reviews').then(res => {
-        reviews.value = res.data;
-        showReviewForm.value = false;
-        editingReview.value = null;
-    });
-}
-function addReview() { editingReview.value = null; showReviewForm.value = true; }
-function editReview(review) { editingReview.value = { ...review }; showReviewForm.value = true; }
-function deleteReview(id) { axios.delete(`/performance-reviews/${id}`).then(() => refreshReviews()); }
-
 const goals = ref([]);
 const showGoalForm = ref(false);
 const editingGoal = ref(null);
@@ -117,7 +102,6 @@ onMounted(() => {
     refreshJobs();
     refreshTrainings();
     refreshCertifications();
-    refreshReviews();
     refreshGoals();
     refreshPlans();
 });
@@ -171,8 +155,8 @@ const updateProfileForm = useForm({
     marital_status: user.marital_status ?? '',
     nik: user.nik ?? '',
     employee_id: user.employee_id ?? '',
-    position: user.position ?? '',
-    department: user.department ?? '',
+    position_id: user.position_id ?? '',
+    department_id: user.department_id ?? '',
     start_date: user.start_date ?? '',
     employment_status: user.employment_status ?? '',
     office_location: user.office_location ?? '',
@@ -181,6 +165,11 @@ const updateProfileForm = useForm({
     benefits: user.benefits ?? '',
     bank_account: user.bank_account ?? '',
 });
+
+const departments = ref(usePage().props.departments ?? []);
+const positions = ref(usePage().props.positions ?? []);
+
+// PrimeVue Dropdown expects objects, so we use positions.value & departments.value directly
 
 const sendVerificationForm = useForm({});
 const sendEmailVerification = () => {
@@ -217,7 +206,15 @@ const updateProfileInformation = () => {
                             Data Pribadi
                         </template>
                         <template #content>
+                            <div v-if="Object.keys(updateProfileForm.errors).length" class="mb-4">
+                                <Message severity="error" class="mb-2">
+                                    <ul>
+                                        <li v-for="(error, field) in updateProfileForm.errors" :key="field">{{ error }}</li>
+                                    </ul>
+                                </Message>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- DEBUG: tampilkan isi departments dan positions -->
                                     <div>
                                        <label for="email" class="font-semibold text-gray-700 dark:text-gray-200">Email</label>
                                        <InputText id="email" v-model="updateProfileForm.email" type="email" fluid />
@@ -287,14 +284,36 @@ const updateProfileInformation = () => {
                                     <label for="employee_id" class="font-semibold text-gray-700 dark:text-gray-200">Nomor ID Karyawan</label>
                                     <InputText disabled id="employee_id" v-model="updateProfileForm.employee_id" fluid :disabled="user.role === 'karyawan'" />
                                 </div>
-                                <div>
-                                    <label for="position" class="font-semibold text-gray-700 dark:text-gray-200">Jabatan</label>
-                                    <InputText disabled id="position" v-model="updateProfileForm.position" fluid :disabled="user.role === 'karyawan'" />
-                                </div>
-                                <div>
-                                    <label for="department" class="font-semibold text-gray-700 dark:text-gray-200">Departemen/Divisi</label>
-                                    <InputText disabled id="department" v-model="updateProfileForm.department" fluid :disabled="user.role === 'karyawan'" />
-                                </div>
+                                    <div>
+                                        <label for="position_id" class="font-semibold text-gray-700 dark:text-gray-200">Jabatan</label>
+                                            <Dropdown
+                                                id="position_id"
+                                                v-model="updateProfileForm.position_id"
+                                                :options="positions"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                placeholder="Pilih Jabatan"
+                                                :filter="true"
+                                                filterPlaceholder="Cari Jabatan..."
+                                                class="w-full"
+                                                disabled
+                                            />
+                                    </div>
+                                    <div>
+                                        <label for="department_id" class="font-semibold text-gray-700 dark:text-gray-200">Departemen/Divisi</label>
+                                            <Dropdown
+                                                id="department_id"
+                                                v-model="updateProfileForm.department_id"
+                                                :options="departments"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                placeholder="Pilih Departemen"
+                                                :filter="true"
+                                                filterPlaceholder="Cari Departemen..."
+                                                class="w-full"
+                                                disabled
+                                            />
+                                    </div>
                                 <div>
                                     <label for="start_date" class="font-semibold text-gray-700 dark:text-gray-200">Tanggal Mulai Bekerja</label>
                                     <InputText disabled id="start_date" v-model="updateProfileForm.start_date" type="date" fluid :disabled="user.role === 'karyawan'" />
@@ -361,12 +380,6 @@ const updateProfileInformation = () => {
                         <template #title>Sertifikasi Profesional</template>
                         <template #content>
                             <CertificationTable :certifications="certifications" :onSaved="refreshCertifications" />
-                        </template>
-                    </Card>
-                    <Card pt:body:class="p-6 md:p-10">
-                        <template #title>Penilaian Kinerja</template>
-                        <template #content>
-                            <PerformanceReviewTable :reviews="reviews" :onSaved="refreshReviews" />
                         </template>
                     </Card>
                     <Card pt:body:class="p-6 md:p-10">

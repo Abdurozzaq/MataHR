@@ -40,7 +40,10 @@ class SupervisorDashboardController extends Controller
                 }
                 $daily[] = [
                     'id' => $sub->id,
+                    'employee_id' => $sub->employee_id,
                     'name' => $sub->name,
+                    'department' => $sub->department,
+                    'avatar' => $sub->avatar ?? null,
                     'status' => $status,
                     'date' => $date,
                 ];

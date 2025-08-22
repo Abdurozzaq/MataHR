@@ -22,7 +22,7 @@ class ProfileUpdateRequest extends FormRequest
             'email' => [
                 'required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()?->id)
             ],
-            'role' => ['required', 'string', 'max:255'],
+            'role' => ['nullable', 'string', 'max:255'],
             'email_verified_at' => ['nullable', 'string', 'max:255'],
             'created_at' => ['nullable', 'string', 'max:255'],
             'updated_at' => ['nullable', 'string', 'max:255'],
@@ -39,8 +39,8 @@ class ProfileUpdateRequest extends FormRequest
         if ($this->user() && $this->user()->role !== 'karyawan') {
             $rules = array_merge($rules, [
                 'employee_id' => ['nullable', 'string', 'max:30'],
-                'position' => ['nullable', 'string', 'max:255'],
-                'department' => ['nullable', 'string', 'max:255'],
+                'position_id' => ['nullable', 'integer', 'exists:positions,id'],
+                'department_id' => ['nullable', 'integer', 'exists:departments,id'],
                 'start_date' => ['nullable', 'date'],
                 'employment_status' => ['nullable', 'in:permanent,contract,intern'],
                 'office_location' => ['nullable', 'string', 'max:255'],
@@ -57,7 +57,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         $data = parent::validated($key, $default);
         if ($this->user() && $this->user()->role === 'karyawan') {
-            unset($data['employee_id'], $data['position'], $data['department'], $data['start_date'], $data['employment_status'], $data['office_location'], $data['supervisor'], $data['salary'], $data['benefits'], $data['bank_account']);
+            unset($data['employee_id'], $data['position_id'], $data['department_id'], $data['start_date'], $data['employment_status'], $data['office_location'], $data['supervisor'], $data['salary'], $data['benefits'], $data['bank_account']);
         }
         return $data;
     }

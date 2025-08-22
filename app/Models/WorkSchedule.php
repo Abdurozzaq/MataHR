@@ -5,6 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkSchedule extends Model
 {
+
+     protected $table = 'work_schedules';
+
     protected $fillable = [
         'day_of_week',
         'clock_in_start',

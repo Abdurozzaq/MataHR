@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Department;
+use App\Models\Position;
 
 class ProfileController extends Controller
 {
@@ -23,7 +25,6 @@ class ProfileController extends Controller
             'jobHistories',
             'trainings',
             'certifications',
-            'performanceReviews',
             'workGoals',
             'careerPlans',
             'supervisedEmployees.employee',
@@ -34,6 +35,8 @@ class ProfileController extends Controller
             'status' => session('status'),
             'user' => $user,
             'old' => session('_old_input', []),
+            'departments' => Department::all(), // atau Department::paginate(10)
+            'positions' => Position::all(),
         ]);
     }
 

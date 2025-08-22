@@ -44,14 +44,6 @@ return new class extends Migration {
             $table->string('issuer')->nullable();
             $table->timestamps();
         });
-        // Performance Reviews
-        Schema::create('performance_reviews', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->text('result');
-            $table->date('date')->nullable();
-            $table->timestamps();
-        });
         // Work Goals
         Schema::create('work_goals', function (Blueprint $table) {
             $table->id();
@@ -75,14 +67,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('employee_id');
             $table->timestamps();
         });
-        // Team Performances
-        Schema::create('team_performances', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('supervisor_id');
-            $table->text('performance_info');
-            $table->date('date')->nullable();
-            $table->timestamps();
-        });
+        
     }
 
     public function down(): void
@@ -91,10 +76,8 @@ return new class extends Migration {
         Schema::dropIfExists('job_histories');
         Schema::dropIfExists('trainings');
         Schema::dropIfExists('certifications');
-        Schema::dropIfExists('performance_reviews');
         Schema::dropIfExists('work_goals');
         Schema::dropIfExists('career_plans');
         Schema::dropIfExists('supervisor_employees');
-        Schema::dropIfExists('team_performances');
     }
 };

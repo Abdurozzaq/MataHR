@@ -164,7 +164,7 @@ function cancelActionLeave() {
           :sortField="sortField"
           :sortOrder="sortOrder"
           dataKey="id"
-          @sort="e => { sortField.value = e.sortField; sortOrder.value = e.sortOrder }"
+          @sort="e => { sortField = e.sortField; sortOrder = e.sortOrder }"
         >
           <Column field="employee_name" header="Nama" sortable />
           <Column field="leave_type" header="Jenis Cuti" sortable :body="leaveTypeLabel" />
@@ -202,7 +202,7 @@ function cancelActionLeave() {
           :rows="rows"
           :totalRecords="totalRecords"
           :first="(page - 1) * rows"
-          @page="e => { page.value = e.page + 1; rows.value = e.rows }"
+          @page="e => { page = e.page + 1; rows = e.rows }"
         />
       </div>
       <Dialog v-model:visible="showConfirmDialog" :modal="true" :closable="false">

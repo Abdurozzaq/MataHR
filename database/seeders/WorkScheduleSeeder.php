@@ -8,7 +8,9 @@ class WorkScheduleSeeder extends Seeder
 {
     public function run()
     {
-        $data = [];
+    // Hapus data lama agar tidak duplikat
+    DB::table('work_schedules')->truncate();
+    $data = [];
         // 0=Sunday, 1=Monday, ..., 6=Saturday
         foreach (range(0,6) as $day) {
             $isWorkday = in_array($day, [1,2,3,4,5]); // Senin-Jumat

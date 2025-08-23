@@ -143,7 +143,7 @@ onMounted(() => {
                 />
             </div>
 
-            <div class="text-center">
+            <!-- <div class="text-center">
                 <span class="text-muted-color mr-1">Don't have an account?</span>
                 <InertiaLink :href="route('register')">
                     <Button
@@ -151,8 +151,8 @@ onMounted(() => {
                         variant="link"
                         label="Sign up"
                     />
-                </InertiaLink>
-            </div>
+                </InertiaLink> 
+            </div> -->
         </form>
     </GuestAuthLayout>
 </template>

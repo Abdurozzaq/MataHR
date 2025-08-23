@@ -3,7 +3,7 @@
     <div class="welcome-bg min-h-screen w-full flex items-center justify-center transition-colors duration-300">
         <div class="welcome-card shadow-xl rounded-3xl p-8 sm:p-16 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-zinc-800 max-w-2xl w-full flex flex-col items-center">
             <div class="flex flex-col items-center gap-2 mb-8">
-                <span class="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-indigo-500 to-green-500 dark:from-red-400 dark:via-indigo-400 dark:to-green-400">MataHR</span>
+                <span class="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-indigo-500 to-green-500 dark:from-red-400 dark:via-indigo-400 dark:to-green-400">{{ appName }}</span>
                 <p class="text-lg text-gray-500 dark:text-zinc-400 mt-2 text-center">
                     HRIS System<br>
                 </p>
@@ -28,12 +28,6 @@
                         <button class="welcome-btn bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 w-full transition">
                             <LogIn />
                             Login
-                        </button>
-                    </InertiaLink>
-                    <InertiaLink :href="route('register')" class="w-full sm:w-auto">
-                        <button class="welcome-btn bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 w-full transition border border-gray-300 dark:border-zinc-700">
-                            <UserPlus />
-                            Register
                         </button>
                     </InertiaLink>
                 </template>
@@ -69,6 +63,7 @@ defineProps({
 
 const page = usePage();
 const isDark = ref(false);
+const appName = import.meta.env.VITE_APP_NAME || 'MataHR';
 function toggleTheme() {
     isDark.value = !isDark.value;
     document.documentElement.classList.toggle('dark', isDark.value);

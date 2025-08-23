@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import axios from 'axios';
 import { ref, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import { useToast } from 'primevue/usetoast';
+// import { useToast } from 'primevue/usetoast';
 import { router } from '@inertiajs/vue3';
 
 // Ambil flash message dari backend
@@ -15,7 +15,7 @@ const breadcrumbs = [
   { label: 'Absensi' }
 ];
 
-const toast = useToast();
+// const toast = useToast();
 const duration = ref(0);
 const loading = ref(false);
 const user = usePage().props.auth.user;
@@ -182,11 +182,9 @@ const userLocationError = ref('');
 // Tampilkan pesan flash jika ada
 if (flash.error) {
   errorMessage.value = flash.error;
-  toast.add({ severity: 'error', summary: 'Gagal', detail: flash.error, life: 3000 });
 }
 if (flash.success) {
   successMessage.value = flash.success;
-  toast.add({ severity: 'success', summary: 'Sukses', detail: flash.success, life: 3000 });
 }
 
 // Ambil lokasi user saat page load
@@ -252,7 +250,7 @@ const handleClockIn = () => {
           longitude,
         })
         .then((response) => {
-          toast.add({ severity: 'success', summary: 'Sukses', detail: response.data.success, life: 3000 });
+          // toast.add({ severity: 'success', summary: 'Sukses', detail: response.data.success, life: 3000 });
           successMessage.value = response.data.success;
           clockedIn.value = true;
           // Set lokasi kantor dan user
@@ -272,7 +270,7 @@ const handleClockIn = () => {
         })
         .catch((error) => {
           const msg = error.response?.data?.error || 'Terjadi kesalahan.';
-          toast.add({ severity: 'error', summary: 'Gagal', detail: msg, life: 3000 });
+          // toast.add({ severity: 'error', summary: 'Gagal', detail: msg, life: 3000 });
           errorMessage.value = msg;
         })
         .finally(() => {
@@ -280,13 +278,13 @@ const handleClockIn = () => {
         });
       },
       (error) => {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Akses lokasi ditolak.', life: 3000 });
+  // toast.add({ severity: 'error', summary: 'Error', detail: 'Akses lokasi ditolak.', life: 3000 });
         errorMessage.value = 'Akses lokasi ditolak.';
         loading.value = false;
       }
     );
   } else {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Browser Anda tidak mendukung Geolocation.', life: 3000 });
+  // toast.add({ severity: 'error', summary: 'Error', detail: 'Browser Anda tidak mendukung Geolocation.', life: 3000 });
     errorMessage.value = 'Browser Anda tidak mendukung Geolocation.';
   }
 };
@@ -304,7 +302,7 @@ const handleClockOut = () => {
           longitude,
         })
         .then((response) => {
-          toast.add({ severity: 'success', summary: 'Sukses', detail: response.data.success, life: 3000 });
+          // toast.add({ severity: 'success', summary: 'Sukses', detail: response.data.success, life: 3000 });
           successMessage.value = response.data.success;
           clockedOut.value = true;
           duration.value = '';
@@ -326,7 +324,7 @@ const handleClockOut = () => {
         .catch((error) => {
           console.log(error);
           const msg = error.response?.data?.error || 'Terjadi kesalahan.';
-          toast.add({ severity: 'error', summary: 'Gagal', detail: msg, life: 3000 });
+          // toast.add({ severity: 'error', summary: 'Gagal', detail: msg, life: 3000 });
           errorMessage.value = msg;
         })
         .finally(() => {
@@ -334,13 +332,13 @@ const handleClockOut = () => {
         });
       },
       (error) => {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Akses lokasi ditolak.', life: 3000 });
+  // toast.add({ severity: 'error', summary: 'Error', detail: 'Akses lokasi ditolak.', life: 3000 });
         errorMessage.value = 'Akses lokasi ditolak.';
         loading.value = false;
       }
     );
   } else {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Browser Anda tidak mendukung Geolocation.', life: 3000 });
+  // toast.add({ severity: 'error', summary: 'Error', detail: 'Browser Anda tidak mendukung Geolocation.', life: 3000 });
     errorMessage.value = 'Browser Anda tidak mendukung Geolocation.';
   }
 };
@@ -417,7 +415,7 @@ const handleClockOut = () => {
             </li>
           </ul>
         </div>
-        <Toast />
+  <!-- <Toast /> -->
       </div>
   </AppLayout>
 </template>

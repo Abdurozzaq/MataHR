@@ -28,7 +28,6 @@ class WorkGoalController extends Controller
         } else {
             $workGoal = WorkGoal::where('user_id', $user->id)->firstOrFail();
         }
-        $this->authorize('update', $workGoal);
         $data = $request->validate([
             'goal' => 'required|string',
             'target_date' => 'nullable|date',
@@ -38,7 +37,6 @@ class WorkGoalController extends Controller
     }
     public function destroy(WorkGoal $workGoal)
     {
-        $this->authorize('delete', $workGoal);
         $workGoal->delete();
         return response()->noContent();
     }

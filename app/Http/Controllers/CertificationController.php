@@ -29,7 +29,6 @@ class CertificationController extends Controller
         } else {
             $certification = Certification::where('user_id', $user->id)->firstOrFail();
         }
-        $this->authorize('update', $certification);
         $data = $request->validate([
             'title' => 'required|string',
             'date' => 'nullable|date',
@@ -40,7 +39,6 @@ class CertificationController extends Controller
     }
     public function destroy(Certification $certification)
     {
-        $this->authorize('delete', $certification);
         $certification->delete();
         return response()->noContent();
     }

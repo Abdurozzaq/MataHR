@@ -31,7 +31,6 @@ class EmergencyContactController extends Controller
         } else {
             $emergencyContact = EmergencyContact::where('user_id', $user->id)->firstOrFail();
         }
-        $this->authorize('update', $emergencyContact);
         $data = $request->validate([
             'name' => 'required|string',
             'relationship' => 'required|string',
@@ -42,7 +41,6 @@ class EmergencyContactController extends Controller
     }
     public function destroy(EmergencyContact $emergencyContact)
     {
-        $this->authorize('delete', $emergencyContact);
         $emergencyContact->delete();
         return response()->noContent();
     }

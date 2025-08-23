@@ -25,7 +25,8 @@
             <td class="px-4 py-3 text-center">
               <div class="flex gap-2 justify-center">
                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm text-blue-600 hover:bg-blue-100" @click="openForm(job)" aria-label="Edit" />
-                <Button icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm text-red-600 hover:bg-red-100" @click="deleteJob(job.id)" aria-label="Hapus" />
+                <Button icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm text-red-600 hover:bg-red-100" @click="confirmDelete(job.id)" aria-label="Hapus" />
+  <ConfirmDialog />
               </div>
             </td>
           </tr>
@@ -67,6 +68,8 @@
 </template>
 <script setup>
 import { ref, h } from 'vue';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 import axios from 'axios';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -77,6 +80,20 @@ const props = defineProps({ jobs: Array, onSaved: Function, userId: [String, Num
 const showForm = ref(false);
 const form = ref({ id: null, position: '', department: '', start_date: '', end_date: '', type: '' });
 const errorMessage = ref('');
+const confirm = useConfirm();
+function confirmDelete(id) {
+  confirm.require({
+    message: 'Apakah Anda yakin ingin menghapus riwayat jabatan ini?',
+    header: 'Konfirmasi Hapus',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Ya, Hapus',
+    rejectLabel: 'Batal',
+    accept: () => {
+      deleteJob(id);
+    },
+    reject: () => {}
+  });
+}
 function openForm(job = null) {
   if (job) {
     Object.assign(form.value, job);

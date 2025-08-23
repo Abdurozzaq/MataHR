@@ -21,19 +21,19 @@ export function useAppLayout() {
         const items: MenuItem[] = [
             {
                 label: 'Dashboard',
-                lucideIcon: LayoutGrid,
+                lucideIcon: House, // Home icon for dashboard
                 route: route('dashboard'),
                 active: currentRoute.value == 'dashboard',
             },
             {
                 label: 'Absensi',
-                lucideIcon: Info,
+                lucideIcon: LayoutGrid, // Grid for attendance
                 route: route('absent'),
                 active: currentRoute.value == 'absent',
             },
             {
                 label: 'Pengajuan Cuti',
-                lucideIcon: FileSearch,
+                lucideIcon: FileSearch, // File search for leave application
                 route: route('leave.index'),
                 active: currentRoute.value == 'leave.index',
             },
@@ -43,18 +43,18 @@ export function useAppLayout() {
         if (userRole.value === 'supervisor' || userRole.value === 'manager') {
             items.push({
                 label: 'Supervisor',
-                lucideIcon: FolderGit2,
+                lucideIcon: Info, // Info icon for supervisor section
                 items: [
                     {
                         label: 'Approval Cuti Bawahan',
                         route: route('leave.subordinate'),
-                        lucideIcon: ExternalLink,
+                        lucideIcon: FileSearch, // File search for approval
                         active: currentRoute.value == 'leave.subordinate',
                     },
                     {
                         label: 'Dashboard Absensi Bawahan',
                         route: route('supervisor.attendance.dashboard'),
-                        lucideIcon: LayoutGrid,
+                        lucideIcon: LayoutGrid, // Grid for attendance dashboard
                         active: currentRoute.value == 'supervisor.attendance.dashboard',
                     },
                 ],
@@ -64,30 +64,30 @@ export function useAppLayout() {
         if (userRole.value === 'superadmin' || userRole.value === 'manager' || userRole.value === 'hrd') {
             items.push({
                 label: 'Master Data',
-                lucideIcon: FolderGit2,
+                lucideIcon: FolderGit2, // Folder for master data
                 items: [
                     {
                         label: 'Department',
                         route: route('department.index'),
-                        lucideIcon: FolderGit2,
+                        lucideIcon: LayoutGrid, // Grid for department
                         active: currentRoute.value == 'department.index',
                     },
                     {
                         label: 'Job Position',
                         route: route('position.index'),
-                        lucideIcon: FolderGit2,
+                        lucideIcon: Info, // Info for job position
                         active: currentRoute.value == 'position.index',
                     },
                     {
                         label: 'Work Schedule',
                         route: route('work-schedule.index'),
-                        lucideIcon: FolderGit2,
+                        lucideIcon: ExternalLink, // External link for work schedule
                         active: currentRoute.value == 'work-schedule.index',
                     },
                     {
                         label: 'Global Setting',
                         route: route('global-setting.index'),
-                        lucideIcon: Settings,
+                        lucideIcon: Settings, // Settings for global setting
                         active: currentRoute.value == 'global-setting.index',
                     },
                 ],
@@ -97,12 +97,12 @@ export function useAppLayout() {
         if (userRole.value === 'superadmin' || userRole.value === 'manager' || userRole.value === 'hrd') {
             items.push({
                 label: 'User Management',
-                lucideIcon: FolderGit2,
+                lucideIcon: Settings, // Settings for user management
                 items: [
                     {
                         label: 'User List',
                         route: route('users.index'),
-                        lucideIcon: FolderGit2,
+                        lucideIcon: Info, // Info for user list
                         active: currentRoute.value == 'users.index',
                     },                   
                 ],

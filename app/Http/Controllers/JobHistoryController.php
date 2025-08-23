@@ -40,7 +40,6 @@ class JobHistoryController extends Controller
             // Jika tidak ada id, ambil JobHistory milik user yang sedang login
             $jobHistory = JobHistory::where('user_id', $user->id)->firstOrFail();
         }
-        $this->authorize('update', $jobHistory);
         $data = $request->validate([
             'position' => 'required|string',
             'department' => 'nullable|string',
@@ -57,7 +56,6 @@ class JobHistoryController extends Controller
         if ($user->role === 'karyawan') {
             return response()->json(['message' => 'Aksi tidak diizinkan untuk karyawan'], 422);
         }
-        $this->authorize('delete', $jobHistory);
         $jobHistory->delete();
         return response()->noContent();
     }

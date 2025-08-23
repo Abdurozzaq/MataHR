@@ -29,7 +29,6 @@ class TrainingController extends Controller
         } else {
             $training = Training::where('user_id', $user->id)->firstOrFail();
         }
-        $this->authorize('update', $training);
         $data = $request->validate([
             'title' => 'required|string',
             'date' => 'nullable|date',
@@ -40,7 +39,6 @@ class TrainingController extends Controller
     }
     public function destroy(Training $training)
     {
-        $this->authorize('delete', $training);
         $training->delete();
         return response()->noContent();
     }

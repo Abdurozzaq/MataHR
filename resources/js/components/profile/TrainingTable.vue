@@ -21,7 +21,8 @@
             <td class="px-4 py-3 text-center">
               <div class="flex gap-2 justify-center">
                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm text-blue-600 hover:bg-blue-100" @click="openForm(training)" aria-label="Edit" />
-                <Button icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm text-red-600 hover:bg-red-100" @click="deleteTraining(training.id)" aria-label="Hapus" />
+                <Button icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm text-red-600 hover:bg-red-100" @click="confirmDelete(training.id)" aria-label="Hapus" />
+  <ConfirmDialog />
               </div>
             </td>
           </tr>
@@ -55,6 +56,8 @@
 </template>
 <script setup>
 import { ref, h } from 'vue';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 import axios from 'axios';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -66,6 +69,20 @@ const showForm = ref(false);
 const form = ref({ id: null, title: '', date: '', provider: '' });
 const responseMessage = ref('');
 const responseType = ref('');
+const confirm = useConfirm();
+function confirmDelete(id) {
+  confirm.require({
+    message: 'Apakah Anda yakin ingin menghapus pelatihan ini?',
+    header: 'Konfirmasi Hapus',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Ya, Hapus',
+    rejectLabel: 'Batal',
+    accept: () => {
+      deleteTraining(id);
+    },
+    reject: () => {}
+  });
+}
 function openForm(training = null) {
   responseMessage.value = '';
   responseType.value = '';

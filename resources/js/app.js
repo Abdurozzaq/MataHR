@@ -9,6 +9,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import { useToast } from 'primevue/usetoast';
 import Toast from 'primevue/toast';
 
@@ -75,6 +76,7 @@ createInertiaApp({
                 pt: globalPt,
             })
             .use(ToastService)
+            .use(ConfirmationService)
             .component('InertiaHead', Head)
             .component('InertiaLink', Link)
             .component('Container', Container)

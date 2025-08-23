@@ -28,7 +28,6 @@ class CareerPlanController extends Controller
         } else {
             $careerPlan = CareerPlan::where('user_id', $user->id)->firstOrFail();
         }
-        $this->authorize('update', $careerPlan);
         $data = $request->validate([
             'plan' => 'required|string',
             'target_date' => 'nullable|date',
@@ -38,7 +37,6 @@ class CareerPlanController extends Controller
     }
     public function destroy(CareerPlan $careerPlan)
     {
-        $this->authorize('delete', $careerPlan);
         $careerPlan->delete();
         return response()->noContent();
     }

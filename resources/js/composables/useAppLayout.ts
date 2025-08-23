@@ -61,7 +61,7 @@ export function useAppLayout() {
             });
         }
 
-        if (userRole.value === 'superadmin' || userRole.value === 'manager' || userRole.value === 'hrd') {
+        if (userRole.value === 'superadmin' || userRole.value === 'manager') {
             items.push({
                 label: 'Master Data',
                 lucideIcon: FolderGit2, // Folder for master data
@@ -94,7 +94,7 @@ export function useAppLayout() {
             });
         }
 
-        if (userRole.value === 'superadmin' || userRole.value === 'manager' || userRole.value === 'hrd') {
+        if (userRole.value === 'superadmin' || userRole.value === 'manager') {
             items.push({
                 label: 'User Management',
                 lucideIcon: Settings, // Settings for user management

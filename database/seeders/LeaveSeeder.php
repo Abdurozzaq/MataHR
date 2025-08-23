@@ -48,23 +48,5 @@ class LeaveSeeder extends Seeder
             'created_at' => $now,
             'updated_at' => $now,
         ]);
-
-        // Seeder cuti untuk Supervisor (ditolak HRD)
-        $userHRD = User::where('email', 'hrd@example.com')->first();
-        \App\Models\Leave::create([
-            'employee_id' => $userSupervisor ? $userSupervisor->employee_id : null,
-            'employee_name' => $userSupervisor ? $userSupervisor->name : 'Supervisor Satu',
-            'leave_type' => 'important',
-            'start_date' => $now->copy()->addDays(10)->toDateString(),
-            'end_date' => $now->copy()->addDays(12)->toDateString(),
-            'reason' => 'Acara keluarga penting',
-            'status' => 'rejected',
-            'approval_note' => 'Tidak bisa karena deadline proyek',
-            'approved_at' => null,
-            'rejected_at' => $now->copy()->addDays(1),
-            'processed_by' => $userHRD ? $userHRD->id : null,
-            'created_at' => $now,
-            'updated_at' => $now,
-        ]);
     }
 }

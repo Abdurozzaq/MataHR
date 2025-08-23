@@ -47,7 +47,6 @@ const pageData = usePage();
 
 const roleOptions = [
   { label: 'Manager', value: 'manager' },
-  { label: 'HRD', value: 'hrd' },
   { label: 'Supervisor', value: 'supervisor' },
   { label: 'Staff', value: 'staff' },
 ];

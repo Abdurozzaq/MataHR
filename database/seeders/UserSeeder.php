@@ -78,35 +78,6 @@ class UserSeeder extends Seeder
             'remember_token' => null,
         ]);
 
-        $hrd = User::create([
-            'name' => 'HRD Satu',
-            'email' => 'hrd@example.com',
-            'role' => 'hrd',
-            'password' => bcrypt('password'),
-            'position_id' => $positionHRD ? $positionHRD->id : null,
-            'department_id' => $departmentHRD ? $departmentHRD->id : null,
-            'full_name' => 'HRD Satu Fullname',
-            'birth_date' => '1992-03-03',
-            'birth_place' => 'Surabaya',
-            'gender' => 'female',
-            'address' => 'Jl. HRD No.3',
-            'phone' => '081234567892',
-            'personal_email' => 'hrd.personal@example.com',
-            'marital_status' => 'single',
-            'nik' => '3234567890',
-            'employee_id' => '3',
-            'start_date' => '2022-03-03',
-            'employment_status' => 'permanent',
-            'office_location' => 'HQ',
-            'supervisor' => null,
-            'salary' => 7000000.00,
-            'benefits' => 'Health, Transport',
-            'bank_account' => '3234567890',
-            'bank_name' => 'Bank BCA',
-            'email_verified_at' => now(),
-            'remember_token' => null,
-        ]);
-
         $supervisor = User::create([
             'name' => 'Supervisor Satu',
             'email' => 'supervisor@example.com',

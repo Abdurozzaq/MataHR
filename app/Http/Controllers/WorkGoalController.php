@@ -15,12 +15,19 @@ class WorkGoalController extends Controller
         $data = $request->validate([
             'goal' => 'required|string',
             'target_date' => 'nullable|date',
+            'user_id' => 'sometimes|integer|exists:users,id',
         ]);
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = $data['user_id'] ?? Auth::id();
         return WorkGoal::create($data);
     }
-    public function update(Request $request, WorkGoal $workGoal)
+    public function update(Request $request, $id = null)
     {
+        $user = Auth::user();
+        if ($id) {
+            $workGoal = WorkGoal::findOrFail($id);
+        } else {
+            $workGoal = WorkGoal::where('user_id', $user->id)->firstOrFail();
+        }
         $this->authorize('update', $workGoal);
         $data = $request->validate([
             'goal' => 'required|string',

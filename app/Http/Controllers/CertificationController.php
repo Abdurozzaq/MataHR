@@ -16,12 +16,19 @@ class CertificationController extends Controller
             'title' => 'required|string',
             'date' => 'nullable|date',
             'issuer' => 'nullable|string',
+            'user_id' => 'sometimes|integer|exists:users,id',
         ]);
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = $data['user_id'] ?? Auth::id();
         return Certification::create($data);
     }
-    public function update(Request $request, Certification $certification)
+    public function update(Request $request, $id = null)
     {
+        $user = Auth::user();
+        if ($id) {
+            $certification = Certification::findOrFail($id);
+        } else {
+            $certification = Certification::where('user_id', $user->id)->firstOrFail();
+        }
         $this->authorize('update', $certification);
         $data = $request->validate([
             'title' => 'required|string',

@@ -28,6 +28,9 @@
     </div>
     <Dialog v-model:visible="showForm" modal header="Form Tujuan Kerja" :style="{ width: '400px' }">
       <form @submit.prevent="onSubmit" class="space-y-4">
+        <div v-if="responseMessage" :class="[responseType === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800', 'rounded-lg px-4 py-2 mb-2 font-semibold']">
+          {{ responseMessage }}
+        </div>
         <div>
           <label class="block font-semibold mb-1">Tujuan Kerja</label>
           <InputText v-model="form.goal" required class="w-full" />
@@ -52,50 +55,71 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-const props = defineProps({ goals: Array, onSaved: Function });
+const props = defineProps({ goals: Array, onSaved: Function, userId: [String, Number] });
 const showForm = ref(false);
 const form = ref({ id: null, goal: '', target_date: '' });
+const responseMessage = ref('');
+const responseType = ref('');
 function openForm(goal = null) {
-  if (goal) Object.assign(form.value, goal);
-  else resetForm();
+  responseMessage.value = '';
+  responseType.value = '';
+  if (goal) {
+    Object.assign(form.value, goal);
+    if (props.userId) form.value.user_id = props.userId;
+  } else {
+    resetForm();
+    if (props.userId) form.value.user_id = props.userId;
+  }
   showForm.value = true;
 }
 function resetForm() {
   form.value = { id: null, goal: '', target_date: '' };
   showForm.value = false;
+  responseMessage.value = '';
+  responseType.value = '';
 }
 function onSubmit() {
+  if (props.userId) form.value.user_id = props.userId;
   if (form.value.id) {
     axios.patch(`/work-goals/${form.value.id}`, form.value)
-      .then(() => { props.onSaved(); resetForm(); })
+      .then((res) => {
+        responseMessage.value = (res?.data?.message || (form.value.id ? 'Target kerja berhasil diupdate' : 'Target kerja berhasil ditambahkan')) + ' (Form akan tertutup dalam 3 detik)';
+        responseType.value = 'success';
+        if (typeof props.onSaved === 'function') props.onSaved();
+        setTimeout(() => {
+          resetForm();
+        }, 3000);
+      })
       .catch((err) => {
-        window.$toast?.add({
-          severity: 'error',
-          summary: 'Gagal Update',
-          detail: err?.response?.data?.message || 'Terjadi kesalahan server',
-          life: 4000,
-        });
+        responseMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
+        responseType.value = 'error';
       });
   } else {
     axios.post('/work-goals', form.value)
-      .then(() => { props.onSaved(); resetForm(); })
+      .then((res) => {
+        responseMessage.value = (res?.data?.message || (form.value.id ? 'Target kerja berhasil diupdate' : 'Target kerja berhasil ditambahkan')) + ' (Form akan tertutup dalam 3 detik)';
+        responseType.value = 'success';
+        if (typeof props.onSaved === 'function') props.onSaved();
+        setTimeout(() => {
+          resetForm();
+        }, 3000);
+      })
       .catch((err) => {
-        window.$toast?.add({
-          severity: 'error',
-          summary: 'Gagal Menambah',
-          detail: err?.response?.data?.message || 'Terjadi kesalahan server',
-          life: 4000,
-        });
+        responseMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
+        responseType.value = 'error';
       });
   }
 }
-function actionTemplate(row) {
-  return [
-    h(Button, { label: 'Edit', size: 'small', onClick: () => openForm(row) }),
-    h(Button, { label: 'Hapus', size: 'small', severity: 'danger', onClick: () => deleteGoal(row.id) })
-  ];
-}
 function deleteGoal(id) {
-  axios.delete(`/work-goals/${id}`).then(() => props.onSaved());
+  axios.delete(`/work-goals/${id}`)
+    .then((res) => {
+      responseMessage.value = res?.data?.message || 'Target kerja berhasil dihapus';
+      responseType.value = 'success';
+      if (typeof props.onSaved === 'function') props.onSaved();
+    })
+    .catch((err) => {
+      responseMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
+      responseType.value = 'error';
+    });
 }
 </script>

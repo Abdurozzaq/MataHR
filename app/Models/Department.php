@@ -9,8 +9,5 @@ class Department extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'description',
-    ];
+    protected $fillable = ['name', 'description'];
 }

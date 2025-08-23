@@ -33,9 +33,9 @@ watch(() => props.job, (val) => { if (val) Object.assign(form.value, val); else 
 function resetForm() { form.value = { id: null, position: '', department: '', start_date: '', end_date: '', type: '' }; }
 function onSubmit() {
   if (form.value.id) {
-    axios.patch(`/job-histories/${form.value.id}`, form.value).then(() => { props.onSaved(); resetForm(); });
+    axios.patch(`/job-histories/${form.value.id}`, form.value).then(() => { if (typeof props.onSaved === 'function') props.onSaved(); resetForm(); });
   } else {
-    axios.post('/job-histories', form.value).then(() => { props.onSaved(); resetForm(); });
+    axios.post('/job-histories', form.value).then(() => { if (typeof props.onSaved === 'function') props.onSaved(); resetForm(); });
   }
 }
 </script>

@@ -40,7 +40,7 @@ export function useAppLayout() {
         ];
 
         // Tampilkan menu supervisor hanya jika user supervisor
-        if (userRole.value === 'supervisor' || userRole.value === 'manajer') {
+        if (userRole.value === 'supervisor' || userRole.value === 'manager') {
             items.push({
                 label: 'Supervisor',
                 lucideIcon: FolderGit2,
@@ -61,7 +61,7 @@ export function useAppLayout() {
             });
         }
 
-        if (userRole.value === 'superadmin' || userRole.value === 'manajer' || userRole.value === 'hr_generalist') {
+        if (userRole.value === 'superadmin' || userRole.value === 'manager' || userRole.value === 'hrd') {
             items.push({
                 label: 'Master Data',
                 lucideIcon: FolderGit2,
@@ -84,6 +84,27 @@ export function useAppLayout() {
                         lucideIcon: FolderGit2,
                         active: currentRoute.value == 'work-schedule.index',
                     },
+                    {
+                        label: 'Global Setting',
+                        route: route('global-setting.index'),
+                        lucideIcon: Settings,
+                        active: currentRoute.value == 'global-setting.index',
+                    },
+                ],
+            });
+        }
+
+        if (userRole.value === 'superadmin' || userRole.value === 'manager' || userRole.value === 'hrd') {
+            items.push({
+                label: 'User Management',
+                lucideIcon: FolderGit2,
+                items: [
+                    {
+                        label: 'User List',
+                        route: route('users.index'),
+                        lucideIcon: FolderGit2,
+                        active: currentRoute.value == 'users.index',
+                    },                   
                 ],
             });
         }

@@ -73,13 +73,18 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-const props = defineProps({ jobs: Array, onSaved: Function });
+const props = defineProps({ jobs: Array, onSaved: Function, userId: [String, Number] });
 const showForm = ref(false);
 const form = ref({ id: null, position: '', department: '', start_date: '', end_date: '', type: '' });
 const errorMessage = ref('');
 function openForm(job = null) {
-  if (job) Object.assign(form.value, job);
-  else resetForm();
+  if (job) {
+    Object.assign(form.value, job);
+    if (props.userId) form.value.user_id = props.userId;
+  } else {
+    resetForm();
+    if (props.userId) form.value.user_id = props.userId;
+  }
   showForm.value = true;
   errorMessage.value = '';
 }
@@ -89,16 +94,17 @@ function resetForm() {
   errorMessage.value = '';
 }
 function onSubmit() {
+  if (props.userId) form.value.user_id = props.userId;
   errorMessage.value = '';
   if (form.value.id) {
     axios.patch(`/job-histories/${form.value.id}`, form.value)
-      .then(() => { props.onSaved(); resetForm(); })
+      .then(() => { if (typeof props.onSaved === 'function') props.onSaved(); resetForm(); })
       .catch((err) => {
         errorMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
       });
   } else {
     axios.post('/job-histories', form.value)
-      .then(() => { props.onSaved(); resetForm(); })
+      .then(() => { if (typeof props.onSaved === 'function') props.onSaved(); resetForm(); })
       .catch((err) => {
         errorMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
       });

@@ -4,6 +4,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\SettingController;
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
@@ -27,3 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('work-goals', App\Http\Controllers\WorkGoalController::class)->except(['create', 'edit']);
     Route::resource('career-plans', App\Http\Controllers\CareerPlanController::class)->except(['create', 'edit']);
 });
+
+// Settings API routes
+Route::get('/settings', [SettingController::class, 'index']);
+Route::put('/settings', [SettingController::class, 'update']);

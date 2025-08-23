@@ -1,3 +1,4 @@
+ 
 <?php
 
 use Illuminate\Foundation\Application;
@@ -10,6 +11,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -58,6 +60,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/position', [PositionController::class, 'store'])->name('position.store');
     Route::put('/position/{id}', [PositionController::class, 'update'])->name('position.update');
     Route::delete('/position/{id}', [PositionController::class, 'destroy'])->name('position.destroy');
+
+    // User CRUD
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+
+    Route::get('/global-setting', function () {
+        return inertia('globalSetting/index');
+    })->name('global-setting.index');
 });
 
 

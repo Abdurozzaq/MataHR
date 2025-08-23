@@ -28,6 +28,9 @@
     </div>
     <Dialog v-model:visible="showForm" modal header="Form Rencana Karir" :style="{ width: '400px' }" class="rounded-xl">
       <form @submit.prevent="onSubmit" class="space-y-4">
+        <div v-if="responseMessage" :class="[responseType === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800', 'rounded-lg px-4 py-2 mb-2 font-semibold']">
+          {{ responseMessage }}
+        </div>
         <div>
           <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-200">Rencana Pengembangan Karir</label>
           <InputText v-model="form.plan" required class="w-full rounded-lg border border-slate-300 dark:border-slate-700" />
@@ -52,50 +55,72 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-const props = defineProps({ plans: Array, onSaved: Function });
+const props = defineProps({ plans: Array, onSaved: Function, userId: [String, Number] });
 const showForm = ref(false);
 const form = ref({ id: null, plan: '', target_date: '' });
+const responseMessage = ref('');
+const responseType = ref('');
 function openForm(plan = null) {
-  if (plan) Object.assign(form.value, plan);
-  else resetForm();
+  responseMessage.value = '';
+  responseType.value = '';
+  if (plan) {
+    Object.assign(form.value, plan);
+    if (props.userId) form.value.user_id = props.userId;
+  } else {
+    resetForm();
+    if (props.userId) form.value.user_id = props.userId;
+  }
   showForm.value = true;
 }
 function resetForm() {
   form.value = { id: null, plan: '', target_date: '' };
   showForm.value = false;
+  responseMessage.value = '';
+  responseType.value = '';
 }
 function onSubmit() {
+  if (props.userId) form.value.user_id = props.userId;
   if (form.value.id) {
     axios.patch(`/career-plans/${form.value.id}`, form.value)
-      .then(() => { props.onSaved(); resetForm(); })
+      .then((res) => {
+        responseMessage.value = (res?.data?.message || (form.value.id ? 'Rencana karir berhasil diupdate' : 'Rencana karir berhasil ditambahkan')) + ' (Form akan tertutup dalam 3 detik)';
+        responseType.value = 'success';
+        if (typeof props.onSaved === 'function') props.onSaved();
+        setTimeout(() => {
+          resetForm();
+        }, 3000);
+      })
       .catch((err) => {
-        window.$toast?.add({
-          severity: 'error',
-          summary: 'Gagal Update',
-          detail: err?.response?.data?.message || 'Terjadi kesalahan server',
-          life: 4000,
-        });
+        responseMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
+        responseType.value = 'error';
       });
   } else {
     axios.post('/career-plans', form.value)
-      .then(() => { props.onSaved(); resetForm(); })
+      .then((res) => {
+        responseMessage.value = (res?.data?.message || 'Rencana karir berhasil ditambahkan') + ' (Form akan tertutup dalam 3 detik)';
+        responseType.value = 'success';
+        if (typeof props.onSaved === 'function') props.onSaved();
+        setTimeout(() => {
+          resetForm();
+        }, 3000);
+      })
       .catch((err) => {
-        window.$toast?.add({
-          severity: 'error',
-          summary: 'Gagal Menambah',
-          detail: err?.response?.data?.message || 'Terjadi kesalahan server',
-          life: 4000,
-        });
+        console.log(err)
+        responseMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
+        responseType.value = 'error';
       });
   }
 }
-function actionTemplate(row) {
-  return [
-    h(Button, { label: 'Edit', size: 'small', onClick: () => openForm(row) }),
-    h(Button, { label: 'Hapus', size: 'small', severity: 'danger', onClick: () => deletePlan(row.id) })
-  ];
-}
 function deletePlan(id) {
-  axios.delete(`/career-plans/${id}`).then(() => props.onSaved());
+  axios.delete(`/career-plans/${id}`)
+    .then((res) => {
+      responseMessage.value = res?.data?.message || 'Rencana karir berhasil dihapus';
+      responseType.value = 'success';
+      if (typeof props.onSaved === 'function') props.onSaved();
+    })
+    .catch((err) => {
+      responseMessage.value = err?.response?.data?.message || 'Terjadi kesalahan server';
+      responseType.value = 'error';
+    });
 }
 </script>

@@ -15,12 +15,19 @@ class CareerPlanController extends Controller
         $data = $request->validate([
             'plan' => 'required|string',
             'target_date' => 'nullable|date',
+            'user_id' => 'sometimes|integer|exists:users,id',
         ]);
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = $data['user_id'] ?? Auth::id();
         return CareerPlan::create($data);
     }
-    public function update(Request $request, CareerPlan $careerPlan)
+    public function update(Request $request, $id = null)
     {
+        $user = Auth::user();
+        if ($id) {
+            $careerPlan = CareerPlan::findOrFail($id);
+        } else {
+            $careerPlan = CareerPlan::where('user_id', $user->id)->firstOrFail();
+        }
         $this->authorize('update', $careerPlan);
         $data = $request->validate([
             'plan' => 'required|string',

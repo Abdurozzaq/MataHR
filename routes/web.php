@@ -1,4 +1,3 @@
- 
 <?php
 
 use Illuminate\Foundation\Application;
@@ -12,6 +11,8 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeaveRequestController;
 
 
 Route::get('/', function () {
@@ -71,6 +72,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/global-setting', function () {
         return inertia('globalSetting/index');
     })->name('global-setting.index');
+
+    Route::get('/dashboard-data', [DashboardController::class, 'index']);
+    Route::get('/leave-requests/me', [LeaveRequestController::class, 'me']);
 });
 
 

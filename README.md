@@ -1,4 +1,6 @@
 
+<img width="1448" height="816" alt="screenshot-2025-08-24-17-49-15" src="https://github.com/user-attachments/assets/ddb6bba5-8753-44ea-830a-017a289763a9" />
+
 # MataHR
 
 **Aplikasi Manajemen Karyawan, Absensi, Cuti, dan Data Karyawan**
